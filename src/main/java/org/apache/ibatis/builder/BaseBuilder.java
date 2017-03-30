@@ -35,9 +35,9 @@ import java.util.regex.Pattern;
  * @author Clinton Begin
  */
 public abstract class BaseBuilder {
-    protected final Configuration configuration;
-    protected final TypeAliasRegistry typeAliasRegistry;
-    protected final TypeHandlerRegistry typeHandlerRegistry;
+    protected final Configuration configuration;             // 全部配置
+    protected final TypeAliasRegistry typeAliasRegistry;     // 类型别名注册器
+    protected final TypeHandlerRegistry typeHandlerRegistry; // 类型处理注册器
 
     public BaseBuilder(Configuration configuration) {
         this.configuration = configuration;
@@ -49,23 +49,53 @@ public abstract class BaseBuilder {
         return configuration;
     }
 
+    /**
+     * 正则解析
+     * @param regex        正则表达式
+     * @param defaultValue 默认值
+     * @return
+     */
     protected Pattern parseExpression(String regex, String defaultValue) {
         return Pattern.compile(regex == null ? defaultValue : regex);
     }
 
+    /**
+     * 返回布尔值
+     * Boolean.valueOf(value) 返回 FALSE ,除非 value 的值为 TRUE
+     * @param value
+     * @param defaultValue
+     * @return
+     */
     protected Boolean booleanValueOf(String value, Boolean defaultValue) {
         return value == null ? defaultValue : Boolean.valueOf(value);
     }
 
+    /**
+     * 返回 int
+     * @param value  String
+     * @param defaultValue
+     * @return
+     */
     protected Integer integerValueOf(String value, Integer defaultValue) {
         return value == null ? defaultValue : Integer.valueOf(value);
     }
 
+    /**
+     * 返回 set 集合
+     * @param value
+     * @param defaultValue
+     * @return
+     */
     protected Set<String> stringSetValueOf(String value, String defaultValue) {
         value = (value == null ? defaultValue : value);
         return new HashSet<String>(Arrays.asList(value.split(",")));
     }
 
+    /**
+     * 根据 JdbcType 别名返回 JdbcType
+     * @param alias
+     * @return JdbcType
+     */
     protected JdbcType resolveJdbcType(String alias) {
         if (alias == null) {
             return null;
@@ -77,6 +107,11 @@ public abstract class BaseBuilder {
         }
     }
 
+    /**
+     * 根据 ResultSetType 别名返回 ResultSetType
+     * @param alias
+     * @return
+     */
     protected ResultSetType resolveResultSetType(String alias) {
         if (alias == null) {
             return null;
@@ -88,6 +123,11 @@ public abstract class BaseBuilder {
         }
     }
 
+    /**
+     * 根据 ParameterMode 别名返回 ParameterMode
+     * @param alias
+     * @return
+     */
     protected ParameterMode resolveParameterMode(String alias) {
         if (alias == null) {
             return null;
@@ -99,6 +139,11 @@ public abstract class BaseBuilder {
         }
     }
 
+    /**
+     *
+     * @param alias
+     * @return
+     */
     protected Object createInstance(String alias) {
         Class<?> clazz = resolveClass(alias);
         if (clazz == null) {
@@ -111,6 +156,11 @@ public abstract class BaseBuilder {
         }
     }
 
+    /**
+     * 根据 Class 别名 返回 Class 类型
+     * @param alias
+     * @return Class<?>
+     */
     protected Class<?> resolveClass(String alias) {
         if (alias == null) {
             return null;
@@ -122,6 +172,12 @@ public abstract class BaseBuilder {
         }
     }
 
+    /**
+     *
+     * @param javaType
+     * @param typeHandlerAlias
+     * @return
+     */
     protected TypeHandler<?> resolveTypeHandler(Class<?> javaType, String typeHandlerAlias) {
         if (typeHandlerAlias == null) {
             return null;
@@ -148,6 +204,12 @@ public abstract class BaseBuilder {
         return handler;
     }
 
+    /**
+     * 解析 字符串 别名 返回 Class
+     * 调用 typeAliasRegistry 的 resolveAlias(alias);
+     * @param alias
+     * @return
+     */
     protected Class<?> resolveAlias(String alias) {
         return typeAliasRegistry.resolveAlias(alias);
     }

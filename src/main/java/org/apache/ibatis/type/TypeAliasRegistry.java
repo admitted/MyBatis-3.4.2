@@ -96,6 +96,13 @@ public class TypeAliasRegistry {
         registerAlias("ResultSet", ResultSet.class);   // 这个最特殊 , ResultSet 代表 ResultSet
     }
 
+    /**
+     * 解析别名 返回相应的 Class 类型
+     * registerAlias("collection", Collection.class);
+     * @param string
+     * @param <T>
+     * @return
+     */
     @SuppressWarnings("unchecked")
     // throws class cast exception as well if types cannot be assigned
     public <T> Class<T> resolveAlias(String string) {

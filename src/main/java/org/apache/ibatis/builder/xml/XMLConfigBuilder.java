@@ -43,14 +43,15 @@ import java.io.Reader;
 import java.util.Properties;
 
 /**
+ *
  * @author Clinton Begin
  * @author Kazuki Shimizu
  */
 public class XMLConfigBuilder extends BaseBuilder {
 
     private boolean parsed;       // 是否被解析过
-    private XPathParser parser;
-    private String environment;
+    private XPathParser parser;   // XPathParser 解析器
+    private String environment;   // 数据库环境
     private ReflectorFactory localReflectorFactory = new DefaultReflectorFactory();
 
     /*****************************************************
@@ -68,6 +69,7 @@ public class XMLConfigBuilder extends BaseBuilder {
         this(new XPathParser(reader, true, props, new XMLMapperEntityResolver()), environment, props);
     }
 
+    /*************注意看构造器参数*************/
 
     public XMLConfigBuilder(InputStream inputStream) {
         this(inputStream, null, null);
@@ -131,6 +133,11 @@ public class XMLConfigBuilder extends BaseBuilder {
         }
     }
 
+    /**
+     *
+     * @param context
+     * @return
+     */
     private Properties settingsAsProperties(XNode context) {
         if (context == null) {
             return new Properties();
@@ -244,6 +251,11 @@ public class XMLConfigBuilder extends BaseBuilder {
         }
     }
 
+    /**
+     * 根据配置文件 设置相关配置
+     * @param props
+     * @throws Exception
+     */
     private void settingsElement(Properties props) throws Exception {
         configuration.setAutoMappingBehavior(AutoMappingBehavior.valueOf(props.getProperty("autoMappingBehavior", "PARTIAL")));
         configuration.setAutoMappingUnknownColumnBehavior(AutoMappingUnknownColumnBehavior.valueOf(props.getProperty("autoMappingUnknownColumnBehavior", "NONE")));
@@ -274,6 +286,12 @@ public class XMLConfigBuilder extends BaseBuilder {
         configuration.setConfigurationFactory(resolveClass(props.getProperty("configurationFactory")));
     }
 
+    /**
+     * 数据库环境配置
+     *   事务 \ 数据库连接池
+     * @param context
+     * @throws Exception
+     */
     private void environmentsElement(XNode context) throws Exception {
         if (context != null) {
             if (environment == null) {

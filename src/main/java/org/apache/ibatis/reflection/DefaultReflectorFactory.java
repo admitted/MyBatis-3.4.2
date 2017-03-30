@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * 默认发射器工厂
+ * 默认 反射器工厂 类
  * mybatis 允许我们自己写自己的  ReflectorFactory 实现类
  * 这个是默认给我们提供的
  */

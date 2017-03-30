@@ -36,6 +36,14 @@ public abstract class BaseTypeHandler<T> extends TypeReference<T> implements Typ
         this.configuration = c;
     }
 
+    /**
+     * 设置查询参数  以执行参数化查询
+     * @param ps   预处理语句
+     * @param i
+     * @param parameter  T 泛型
+     * @param jdbcType   jdbc 数据类型
+     * @throws SQLException
+     */
     @Override
     public void setParameter(PreparedStatement ps, int i, T parameter, JdbcType jdbcType) throws SQLException {
         if (parameter == null) {
@@ -60,14 +68,23 @@ public abstract class BaseTypeHandler<T> extends TypeReference<T> implements Typ
         }
     }
 
+    /**
+     *  得到结果集
+     * @param rs  结果集
+     * @param columnName 字段名
+     * @return
+     * @throws SQLException
+     */
     @Override
     public T getResult(ResultSet rs, String columnName) throws SQLException {
         T result;
         try {
+            // getNullableResult 让子类去实现
             result = getNullableResult(rs, columnName);
         } catch (Exception e) {
             throw new ResultMapException("Error attempting to get column '" + columnName + "' from result set.  Cause: " + e, e);
         }
+        // 如果结果集为空
         if (rs.wasNull()) {
             return null;
         } else {
@@ -75,6 +92,13 @@ public abstract class BaseTypeHandler<T> extends TypeReference<T> implements Typ
         }
     }
 
+    /**
+     * 得到结果集
+     * @param rs  结果集
+     * @param columnIndex 字段索引(序号)
+     * @return
+     * @throws SQLException
+     */
     @Override
     public T getResult(ResultSet rs, int columnIndex) throws SQLException {
         T result;
@@ -90,6 +114,13 @@ public abstract class BaseTypeHandler<T> extends TypeReference<T> implements Typ
         }
     }
 
+    /**
+     * 得到结果集
+     * @param cs   调用语句 (存储过程等)
+     * @param columnIndex
+     * @return
+     * @throws SQLException
+     */
     @Override
     public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
         T result;
