@@ -111,8 +111,8 @@ public class Configuration {
     protected LocalCacheScope localCacheScope = LocalCacheScope.SESSION;
     protected JdbcType jdbcTypeForNull = JdbcType.OTHER; // 默认 int OTHER = 1111
     protected Set<String> lazyLoadTriggerMethods = new HashSet<String>(Arrays.asList(new String[]{"equals", "clone", "hashCode", "toString"}));
-    protected Integer defaultStatementTimeout;           //设置超时时间,它决定驱动等待一个数据库响应的时间。
-    protected Integer defaultFetchSize;
+    protected Integer defaultStatementTimeout;           // 设置超时时间,它决定驱动等待一个数据库响应的时间。
+    protected Integer defaultFetchSize;                  // 意思是当调用rs.next时，ResultSet会一次性从服务器上取得多少行数据回来，这样在下次rs.next时，可以从缓存中取出来
     protected ExecutorType defaultExecutorType = ExecutorType.SIMPLE;  // 默认为简单执行器
     protected AutoMappingBehavior autoMappingBehavior = AutoMappingBehavior.PARTIAL; //自动映射列到字段/属性。
     protected AutoMappingUnknownColumnBehavior autoMappingUnknownColumnBehavior = AutoMappingUnknownColumnBehavior.NONE;
