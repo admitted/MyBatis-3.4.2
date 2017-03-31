@@ -108,7 +108,10 @@ public class SqlSessionFactoryBuilder {
     }
 
     /**
+     * mybatis-spring-1.2.jar 会直接调用这个方法
+     * Configuration 已经在 SqlSessionFactoryBean 中配置好 里面的默认配置需要 我们进一步学习
      * 根据传入的 Configuration 返回 相应配置的 SqlSessionFactory
+     *
      * 第 9 个方法有意思了 , 每个方法最后都会调用到它
      *
      */

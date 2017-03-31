@@ -24,20 +24,25 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- *
+ * 对org.w3c.dom.Node的包装
+ * 解析 Mapping.xml
  * @author Clinton Begin
  */
 public class XNode {
 
+    //org.w3c.dom.Node
     private Node node;
+    //以下都是预先把信息都解析好，放到map等数据结构中（内存中）
     private String name;
     private String body;
     private Properties attributes;
     private Properties variables;
+    //XPathParser方便xpath解析
     private XPathParser xpathParser;
 
     /**
      * XNode 构造器
+     * 在构造时就把一些信息（属性，body）全部解析好，以便我们直接通过getter函数取得
      * @param xpathParser
      * @param node
      * @param variables
@@ -60,7 +65,12 @@ public class XNode {
         return new XNode(xpathParser, node, variables);
     }
 
+    /**
+     * 获取父节点
+     * @return
+     */
     public XNode getParent() {
+        //调用Node.getParentNode获取父节点 ,如果取到，包装一下，返回XNode
         Node parent = node.getParentNode();
         if (parent == null || !(parent instanceof Element)) {
             return null;
@@ -69,12 +79,18 @@ public class XNode {
         }
     }
 
+    /**
+     * 获取 node 节点的完整定位路径  /aaa/bbbb/ccc/ddd
+     * 返回 路径 String
+     * @return
+     */
     public String getPath() {
         StringBuilder builder = new StringBuilder();
         Node current = node;
+        // 循环格式化 节点为路径 string
         while (current != null && current instanceof Element) {
             if (current != node) {
-                builder.insert(0, "/");
+                builder.insert(0, "/"); // 第一位插入 "/"
             }
             builder.insert(0, current.getNodeName());
             current = current.getParentNode();
@@ -82,6 +98,20 @@ public class XNode {
         return builder.toString();
     }
 
+    //取得标示符   ("resultMap[authorResult]")
+    //XMLMapperBuilder.resultMapElement调用
+//	<resultMap id="authorResult" type="Author">
+//	  <id property="id" column="author_id"/>
+//	  <result property="username" column="author_username"/>
+//	  <result property="password" column="author_password"/>
+//	  <result property="email" column="author_email"/>
+//	  <result property="bio" column="author_bio"/>
+//	</resultMap>
+
+    /**
+     * 取得标识符  ("resultMap[authorResult]")
+     * @return
+     */
     public String getValueBasedIdentifier() {
         StringBuilder builder = new StringBuilder();
         XNode current = this;
@@ -89,14 +119,16 @@ public class XNode {
             if (current != this) {
                 builder.insert(0, "_");
             }
+            // 先找 property的值 找不到返回 null
+            // 再找 value 的值   找不到返回 property 的值
+            // 最后找 id 的值    找不到返回 value 的值
             String value = current.getStringAttribute("id",
                     current.getStringAttribute("value",
                             current.getStringAttribute("property", null)));
             if (value != null) {
                 value = value.replace('.', '_');
                 builder.insert(0, "]");
-                builder.insert(0,
-                        value);
+                builder.insert(0, value);
                 builder.insert(0, "[");
             }
             builder.insert(0, current.getName());
@@ -218,14 +250,27 @@ public class XNode {
         }
     }
 
+    /**
+     * 返回 给定属性的值 若没有此属性, 返回 null
+     * @param name
+     * @return
+     */
     public String getStringAttribute(String name) {
+        //
         return getStringAttribute(name, null);
     }
 
+    /**
+     * 获取给定属性名的值
+     * @param name 属性名
+     * @param def  默认值
+     * @return value
+     */
     public String getStringAttribute(String name, String def) {
+        // 获得属性值
         String value = attributes.getProperty(name);
         if (value == null) {
-            return def;
+            return def;      // 如果为空 ,返回默认值 def
         } else {
             return value;
         }
@@ -235,6 +280,12 @@ public class XNode {
         return getBooleanAttribute(name, null);
     }
 
+    /**
+     * 获取给定属性的 Boolean 值
+     * @param name
+     * @param def
+     * @return
+     */
     public Boolean getBooleanAttribute(String name, Boolean def) {
         String value = attributes.getProperty(name);
         if (value == null) {
@@ -244,6 +295,11 @@ public class XNode {
         }
     }
 
+    /**
+     * 获取给定属性的 Integer 值
+     * @param name
+     * @return
+     */
     public Integer getIntAttribute(String name) {
         return getIntAttribute(name, null);
     }
@@ -296,6 +352,10 @@ public class XNode {
         }
     }
 
+    /**
+     * 获取 node 节点的子节点
+     * @return
+     */
     public List<XNode> getChildren() {
         List<XNode> children = new ArrayList<XNode>();
         NodeList nodeList = node.getChildNodes();
@@ -310,6 +370,10 @@ public class XNode {
         return children;
     }
 
+    /**
+     * 获得子节点 (子节点含有 name 和 value 属性)
+     * @return
+     */
     public Properties getChildrenAsProperties() {
         Properties properties = new Properties();
         for (XNode child : getChildren()) {
@@ -322,6 +386,10 @@ public class XNode {
         return properties;
     }
 
+    /**
+     * 调试用的打印信息
+     * @return
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

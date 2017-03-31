@@ -15,9 +15,9 @@
  */
 package org.apache.ibatis.mapping;
 
-import javax.sql.DataSource;
-
 import org.apache.ibatis.transaction.TransactionFactory;
+
+import javax.sql.DataSource;
 
 /**
  * 数据库运行环境
@@ -52,7 +52,7 @@ public final class Environment {
     /**
      * 为什么造一个这个和外部类很像的静态内部类??? 为什么要这么做??? 好处是什么???
      *
-     * 运用链表式 返回 this 对象
+     * 运用链表式 返回 this 对象 (便于设置属性值)
      * 静态内部类 : 相当于一个静态属性
      * 外部可调用此类的方法  例如: XMLConfigBuilder 的 environmentsElement 方法
      * Environment.Builder environmentBuilder = new Environment.Builder(id)

@@ -343,6 +343,10 @@ public final class TypeHandlerRegistry {
 
     // Only handler type
 
+    /**
+     * 注册 typeHandlerClass
+     * @param typeHandlerClass
+     */
     public void register(Class<?> typeHandlerClass) {
         boolean mappedTypeFound = false;
         MappedTypes mappedTypes = typeHandlerClass.getAnnotation(MappedTypes.class);
@@ -397,6 +401,10 @@ public final class TypeHandlerRegistry {
 
     // scan
 
+    /**
+     * 根据 包名注册 typeHandler
+     * @param packageName
+     */
     public void register(String packageName) {
         ResolverUtil<Class<?>> resolverUtil = new ResolverUtil<Class<?>>();
         resolverUtil.find(new ResolverUtil.IsA(TypeHandler.class), packageName);
