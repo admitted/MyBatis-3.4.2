@@ -33,7 +33,7 @@ public class TypeAliasRegistry {
 
     /**
      * 初始化 50 个 类型别名
-     *
+     * 还会在 Configuration 类中初始化
      */
     public TypeAliasRegistry() {
         registerAlias("string", String.class);

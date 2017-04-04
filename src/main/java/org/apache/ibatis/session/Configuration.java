@@ -171,6 +171,10 @@ public class Configuration {
         this.environment = environment;
     }
 
+    /**
+     * 构造器 (初始化 22个 注册类型别名)
+     * 注册 TYPE_ALIASES.put(key, value);  一个 HashMap 集合
+     */
     public Configuration() {
         typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
         typeAliasRegistry.registerAlias("MANAGED", ManagedTransactionFactory.class);
@@ -201,6 +205,7 @@ public class Configuration {
         typeAliasRegistry.registerAlias("CGLIB", CglibProxyFactory.class);
         typeAliasRegistry.registerAlias("JAVASSIST", JavassistProxyFactory.class);
 
+        // 语言注册器
         languageRegistry.setDefaultDriverClass(XMLLanguageDriver.class);
         languageRegistry.register(RawLanguageDriver.class);
     }
@@ -351,6 +356,7 @@ public class Configuration {
 
     public void setProxyFactory(ProxyFactory proxyFactory) {
         if (proxyFactory == null) {
+            // 如果 代理工厂 null , 则默认生成一个 JavassistProxyFactory 返回
             proxyFactory = new JavassistProxyFactory();
         }
         this.proxyFactory = proxyFactory;
@@ -519,7 +525,10 @@ public class Configuration {
         return languageRegistry.getDefaultDriver();
     }
 
-    /** @deprecated Use {@link #getDefaultScriptingLanguageInstance()} */
+    /**
+     * @deprecated Use
+     * {@link #getDefaultScriptingLanguageInstance()}
+     * */
     @Deprecated
     public LanguageDriver getDefaultScriptingLanuageInstance() {
         return getDefaultScriptingLanguageInstance();
