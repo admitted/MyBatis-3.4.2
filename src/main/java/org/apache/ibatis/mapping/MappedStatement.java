@@ -29,7 +29,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
+ * 映射语句
+ * 内部含有各种参数,各种配置
  * @author Clinton Begin
  */
 public final class MappedStatement {
@@ -62,6 +63,14 @@ public final class MappedStatement {
         // constructor disabled
     }
 
+    /**
+     * 建造者模式 (Builder模式) 链式设计(返回 this 对象)
+     * 建造者返回给客户一个完整的的产品对象，而客户端无须关心该对象所包含的额属性和组建方式
+     *  静态内部类
+     *  使用方式，和普通类一样
+     *  1、静态内部类可以使用外部类中所有的静态属性和方法。包括私有的；
+     *  2、静态内部类还可以使用外部类中所有的构造方法。包括私有的。
+     */
     public static class Builder {
         private MappedStatement mappedStatement = new MappedStatement();
 
